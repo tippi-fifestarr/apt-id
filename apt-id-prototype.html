@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apt-ID Interactive Experience Prototype</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs/loader.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #6F4BD5;
+            --secondary-color: #45CAFF;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --panel-border: #ddd;
+            --highlight-color: #ffeb3b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .header {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+            gap: 1rem;
+        }
+
+        .panel {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--panel-border);
+            padding-bottom: 0.5rem;
+        }
+
+        .editor-container {
+            flex: 1;
+            min-width: 500px;
+            height: 500px;
+        }
+
+        .preview-container {
+            flex: 1;
+            min-width: 400px;
+        }
+
+        .visualization-container {
+            flex: 2;
+            min-width: 800px;
+        }
+
+        .controls-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .template-controls {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .deployment-controls {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #5a3cb8;
+        }
+
+        .secondary-button {
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .secondary-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .template-button {
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview {
+            border: 1px solid var(--panel-border);
+            border-radius: 8px;
+            padding: 1rem;
+            background-color: white;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #888;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-bio {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .profile-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .profile-link {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .profile-link:hover {
+            transform: translateY(-2px);
+            background-color: #5a3cb8;
+        }
+
+        .custom-fields {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .custom-field {
+            margin-bottom: 1rem;
+        }
+
+        .custom-field-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .custom-field-content {
+            color: #666;
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-badge {
+            background-color: #f0f0f0;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .visualization {
+            width: 100%;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            padding: 1rem;
+        }
+
+        .deployment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .deployment-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-pending {
+            background-color: #ffc107;
+        }
+
+        .status-complete {
+            background-color: #28a745;
+        }
+
+        .status-waiting {
+            background-color: #6c757d;
+        }
+
+        .resource-visualization {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+        }
+
+        .resource-panel {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            max-width: 45%;
+        }
+
+        .resource-title {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .resource-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .resource-slot {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            background-color: white;
+        }
+
+        .resource-group {
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: white;
+        }
+
+        .resource-item {
+            padding: 0.25rem 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 0.25rem;
+            background-color: #f8f9fa;
+            display: inline-block;
+        }
+
+        .cost-comparison {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .cost-highlight {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .progress-indicator {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-items {
+            margin-bottom: 1rem;
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .progress-item.completed:before {
+            content: "✓";
+            color: #28a745;
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+
+        .progress-item.pending:before {
+            content: "○";
+            color: #6c757d;
+            margin-right: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>Apt-ID Interactive Experience</h1>
+        <p>Prototype for May Hackathon</p>
+    </div>
+
+    <div class="container">
+        <div class="panel editor-container">
+            <div class="panel-header">
+                <h2>Move Contract Editor</h2>
+                <div>
+                    <button class="secondary-button" id="reset-editor">Reset Code</button>
+                </div>
+            </div>
+            <div id="monaco-editor" style="width: 100%; height: 450px;"></div>
+        </div>
+
+        <div class="panel preview-container">
+            <div class="panel-header">
+                <h2>Profile Preview</h2>
+                <div>
+                    <button class="secondary-button" id="refresh-preview">Refresh</button>
+                </div>
+            </div>
+            <div class="preview" id="profile-preview">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <span id="avatar-placeholder">🧑</span>
+                    </div>
+                    <h2 class="profile-name">Hackathon Participant</h2>
+                    <p class="profile-bio">Building awesome projects on Aptos!</p>
+                </div>
+                <div class="profile-links">
+                    <a href="#" class="profile-link">GitHub</a>
+                    <a href="#" class="profile-link">Twitter</a>
+                    <a href="#" class="profile-link">Portfolio</a>
+                </div>
+                <!-- Custom fields will be added here -->
+                <div class="custom-fields" id="custom-fields"></div>
+            </div>
+        </div>
+
+        <div class="panel visualization-container">
+            <div class="panel-header">
+                <h2>Blockchain Visualization</h2>
+                <div>
+                    <button class="secondary-button" id="toggle-view">Toggle View</button>
+                </div>
+            </div>
+            <div class="visualization" id="visualization">
+                <div class="resource-visualization">
+                    <div class="resource-panel">
+                        <div class="resource-title">Traditional Storage</div>
+                        <div class="resource-diagram">
+                            <div class="resource-slot">Bio</div>
+                            <div class="resource-slot">LinkTree</div>
+                            <div class="resource-slot">ProfileRef</div>
+                            <div class="resource-slot" id="traditional-custom-slot"></div>
+                        </div>
+                        <div class="cost-comparison">
+                            Storage Cost: 0.0034 APT
+                        </div>
+                    </div>
+
+                    <div class="resource-panel">
+                        <div class="resource-title">Resource Group Storage</div>
+                        <div class="resource-diagram">
+                            <div class="resource-group">
+                                <div class="resource-item">Bio</div>
+                                <div class="resource-item">LinkTree</div>
+                                <div class="resource-item">ProfileRef</div>
+                                <div class="resource-item" id="resource-group-custom-item"></div>
+                            </div>
+                            <div class="resource-slot">Object Group Slot</div>
+                        </div>
+                        <div class="cost-comparison">
+                            Storage Cost: <span class="cost-highlight">0.0012 APT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls-container">
+            <div class="panel template-controls">
+                <div class="panel-header">
+                    <h2>Modification Templates</h2>
+                </div>
+                <div>
+                    <button class="template-button" id="add-field">+ Add Profile Field</button>
+                    <button class="template-button" id="add-link-type">+ Add Link Type</button>
+                    <button class="template-button" id="add-function">+ Add Function</button>
+                </div>
+                <div class="form-group" id="template-options" style="display: none;">
+                    <label>Field Properties:</label>
+                    <input type="text" class="form-control" id="field-name" placeholder="Field Name">
+                    <select class="form-control" id="field-type" style="margin-top: 0.5rem;">
+                        <option value="String">String</option>
+                        <option value="vector<String>">vector&lt;String&gt;</option>
+                        <option value="u64">u64</option>
+                        <option value="bool">bool</option>
+                    </select>
+                    <button id="apply-template" style="margin-top: 0.5rem;">Apply</button>
+                </div>
+            </div>
+
+            <div class="panel deployment-controls">
+                <div class="panel-header">
+                    <h2>Deployment</h2>
+                </div>
+                <div class="deployment-form">
+                    <div class="form-group">
+                        <label>Project Name:</label>
+                        <input type="text" class="form-control" id="project-name" placeholder="My Apt-ID Profile">
+                    </div>
+                    <div class="form-group">
+                        <label>Subdomain:</label>
+                        <input type="text" class="form-control" id="subdomain" placeholder="my-profile.learn.aptoslabs.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Primary Color:</label>
+                        <input type="color" class="form-control" id="primary-color" value="#6F4BD5">
+                    </div>
+                    <button id="test-simulation">Test in Simulation</button>
+                    <button id="deploy-testnet" style="margin-top: 0.5rem;">Deploy to Testnet</button>
+                </div>
+                <div class="deployment-status" id="deployment-status" style="display: none;">
+                    <h3>Deployment Status:</h3>
+                    <div class="status-item">
+                        <div id="status-validating" class="status-indicator status-pending"></div>
+                        <span>Validating Contract</span>
+                    </div>
+                    <div class="status-item">
+                        <div id="status-compiling" class="status-indicator status-waiting"></div>
+                        <span>Compiling Contract</span>
+                    </div>
+                    <div class="status-item">
+                        <div id="status-deploying" class="status-indicator status-waiting"></div>
+                        <span>Deploying Contract</span>
+                    </div>
+                    <div class="status-item">
+                        <div id="status-building" class="status-indicator status-waiting"></div>
+                        <span>Building Frontend</span>
+                    </div>
+                    <div class="status-item">
+                        <div id="status-complete" class="status-indicator status-waiting"></div>
+                        <span>Complete</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="progress-indicator">
+            <div class="progress-title">Learning Progress</div>
+            <div class="progress-items">
+                <div class="progress-item completed">Explore base application</div>
+                <div class="progress-item completed">View contract structure</div>
+                <div class="progress-item" id="progress-add-field">Add custom profile field</div>
+                <div class="progress-item" id="progress-add-link">Add custom link type</div>
+                <div class="progress-item" id="progress-deploy">Deploy to testnet</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-bar-fill" style="width: 40%;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initial Move contract code
+        const initialContractCode = `/// AptId profile
+///
+/// Provides a LinkTree and a image and bio, sharable across multiple platforms
+module profile_address::profile {
+
+    use std::option::{Self, Option};
+    use std::signer;
+    use std::string::String;
+    use aptos_std::simple_map::{Self, SimpleMap};
+    use aptos_framework::event::emit;
+    use aptos_framework::object::{Self, DeleteRef, ExtendRef, Object};
+    use aptos_token_objects::token;
+    use aptos_token_objects::token::Token;
+
+    #[resource_group_member(group = aptos_framework::object::ObjectGroup)]
+    /// Controller for the profile object, to allow for extending and deletion
+    struct Controller has key {
+        extend_ref: ExtendRef,
+        delete_ref: DeleteRef
+    }
+
+    #[resource_group_member(group = aptos_framework::object::ObjectGroup)]
+    /// A bio for the account, extendable to add new fields
+    struct Bio has key, copy, drop {
+        name: String,
+        image_url: String,
+        description: String,
+        // You can add more fields here
+    }
+
+    #[resource_group_member(group = aptos_framework::object::ObjectGroup)]
+    /// A profile for the account, extendable to use different storage mechanisms
+    enum LinkTree has key, copy, drop {
+        /// Simple map implementation
+        SM {
+            links: SimpleMap<String, Link>
+        }
+    }
+
+    /// A link for the profile, extendable to have more info later
+    enum Link has store, copy, drop {
+        /// Unordered links, no other info
+        UnorderedLink {
+            url: String
+        }
+        // You can add more link types here
+    }
+
+    /// A ref to ensure we can have a deletable profile, with uniqueness
+    struct ProfileRef has key, copy, drop {
+        object_address: address
+    }
+
+    // Create profile function and other functions...
+    // Omitted for brevity in this prototype
+}`;
+
+        // Initialize Monaco Editor
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            // Define Move language
+            monaco.languages.register({ id: 'move' });
+            monaco.languages.setMonarchTokensProvider('move', {
+                tokenizer: {
+                    root: [
+                        [/\/\/\/.*$/, 'comment.doc'],
+                        [/\/\/.*$/, 'comment'],
+                        [/\/\*/, 'comment', '@comment'],
+                        [/#\[.*\]/, 'annotation'],
+                        [/\b(use|module|struct|enum|has|key|copy|drop|store|fun|public|entry|acquires|let|if|else|for|in|while|loop|return|abort|as|const|friend|native|spec|schema|invariant|include|apply|to|except|move|copy|with|where|global|old|emit)\b/, 'keyword'],
+                        [/\b(Self|vector|address|signer|u8|u16|u32|u64|u128|u256|bool|String)\b/, 'type'],
+                        [/\b(true|false)\b/, 'boolean'],
+                        [/[0-9]+/, 'number'],
+                        [/".*?"/, 'string'],
+                        [/@[a-zA-Z_][a-zA-Z0-9_]*/, 'address'],
+                        [/[a-zA-Z_][a-zA-Z0-9_]*/, 'identifier'],
+                    ],
+                    comment: [
+                        [/[^\/*]+/, 'comment'],
+                        [/\/\*/, 'comment', '@push'],
+                        [/\*\//, 'comment', '@pop'],
+                        [/[\/*]/, 'comment']
+                    ]
+                }
+            });
+
+            // Create Monaco Editor
+            const editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+                value: initialContractCode,
+                language: 'move',
+                theme: 'vs',
+                automaticLayout: true,
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                lineNumbers: 'on',
+                glyphMargin: true,
+                folding: true,
+                lineDecorationsWidth: 10,
+                lineNumbersMinChars: 3
+            });
+
+            // Add custom markers for modification points
+            function addMarkers() {
+                const model = editor.getModel();
+                const decorations = editor.deltaDecorations([], [
+                    {
+                        range: new monaco.Range(22, 5, 25, 5),
+                        options: {
+                            isWholeLine: true,
+                            className: 'modification-point',
+                            glyphMarginClassName: 'modification-glyph',
+                            inlineClassName: 'modification-inline',
+                            hoverMessage: { value: 'Modification point: Add fields to Bio struct' }
+                        }
+                    },
+                    {
+                        range: new monaco.Range(39, 5, 41, 9),
+                        options: {
+                            isWholeLine: true,
+                            className: 'modification-point',
+                            glyphMarginClassName: 'modification-glyph',
+                            inlineClassName: 'modification-inline',
+                            hoverMessage: { value: 'Modification point: Add new link types' }
+                        }
+                    }
+                ]);
+            }
+
+            addMarkers();
+
+            // Template functionality
+            let currentTemplateType = null;
+
+            document.getElementById('add-field').addEventListener('click', function() {
+                currentTemplateType = 'field';
+                document.getElementById('template-options').style.display = 'block';
+                document.getElementById('field-name').value = 'skills';
+                document.getElementById('field-type').value = 'vector<String>';
+            });
+
+            document.getElementById('add-link-type').addEventListener('click', function() {
+                currentTemplateType = 'link';
+                document.getElementById('template-options').style.display = 'block';
+                document.getElementById('field-name').value = 'CategoryLink';
+                document.getElementById('field-type').value = 'String';
+            });
+
+            document.getElementById('add-function').addEventListener('click', function() {
+                currentTemplateType = 'function';
+                document.getElementById('template-options').style.display = 'block';
+                document.getElementById('field-name').value = 'view_skills';
+                document.getElementById('field-type').value = 'skills';
+            });
+
+            document.getElementById('apply-template').addEventListener('click', function() {
+                const fieldName = document.getElementById('field-name').value;
+                const fieldType = document.getElementById('field-type').value;
+                
+                if (currentTemplateType === 'field') {
+                    // Add field to Bio struct
+                    const model = editor.getModel();
+                    const bioStruct = model.findMatches('struct Bio has key, copy, drop', false, true, false, null, true);
+                    if (bioStruct.length > 0) {
+                        const lines = model.getLinesContent();
+                        let endLineNumber = bioStruct[0].range.startLineNumber;
+                        for (let i = endLineNumber; i < lines.length; i++) {
+                            if (lines[i].includes('}')) {
+                                endLineNumber = i;
+                                break;
+                            }
+                        }
+                        
+                        editor.executeEdits('template', [{
+                            range: new monaco.Range(endLineNumber, 5, endLineNumber, 5),
+                            text: `    ${fieldName}: ${fieldType},\n    `,
+                            forceMoveMarkers: true
+                        }]);
+
+                        // Update preview
+                        updatePreview(fieldName, fieldType);
+                        
+                        // Update progress
+                        document.getElementById('progress-add-field').className = 'progress-item completed';
+                        updateProgressBar();
+                        
+                        // Update visualization
+                        document.getElementById('traditional-custom-slot').textContent = fieldName;
+                        document.getElementById('resource-group-custom-item').textContent = fieldName;
+                    }
+                } else if (currentTemplateType === 'link') {
+                    // Add link type to Link enum
+                    const model = editor.getModel();
+                    const linkEnum = model.findMatches('enum Link has store, copy, drop', false, true, false, null, true);
+                    if (linkEnum.length > 0) {
+                        const lines = model.getLinesContent();
+                        let endLineNumber = linkEnum[0].range.startLineNumber;
+                        for (let i = endLineNumber; i < lines.length; i++) {
+                            if (lines[i].includes('// You can add more link types here')) {
+                                endLineNumber = i;
+                                break;
+                            }
+                        }
+                        
+                        editor.executeEdits('template', [{
+                            range: new monaco.Range(endLineNumber, 9, endLineNumber, 9),
+                            text: `        ${fieldName} {\n            url: String,\n            category: ${fieldType}\n        },\n        `,
+                            forceMoveMarkers: true
+                        }]);
+                        
+                        // Update progress
+                        document.getElementById('progress-add-link').className = 'progress-item completed';
+                        updateProgressBar();
+                    }
+                } else if (currentTemplateType === 'function') {
+                    // Add view function
+                    const model = editor.getModel();
+                    const lastLine = model.getLineCount();
+                    
+                    editor.executeEdits('template', [{
+                        range: new monaco.Range(lastLine - 1, 1, lastLine - 1, 1),
+                        text: `
+    #[view]
+    public fun ${fieldName}(owner: address): Option<${fieldType}> acquires ProfileRef, Bio {
+        view_bio(owner).map(|bio| {
+            bio.${fieldType}
+        })
+    }\n\n`,
+                        forceMoveMarkers: true
+                    }]);
+                }
+                
+                document.getElementById('template-options').style.display = 'none';
+            });
+
+            // Function to update preview based on custom fields
+            function updatePreview(fieldName, fieldType) {
+                const customFieldsContainer = document.getElementById('custom-fields');
+                let customFieldHtml = '';
+                
+                if (fieldName === 'skills' && fieldType === 'vector<String>') {
+                    customFieldHtml = `
+                        <div class="custom-field">
+                            <div class="custom-field-title">Skills</div>
+                            <div class="skill-list">
+                                <span class="skill-badge">Move Programming</span>
+                                <span class="skill-badge">Frontend Development</span>
+                                <span class="skill-badge">Blockchain Architecture</span>
+                            </div>
+                        </div>
+                    `;
+                } else if (fieldType === 'String') {
+                    customFieldHtml = `
+                        <div class="custom-field">
+                            <div class="custom-field-title">${fieldName}</div>
+                            <div class="custom-field-content">Sample ${fieldName} value</div>
+                        </div>
+                    `;
+                } else if (fieldType === 'u64') {
+                    customFieldHtml = `
+                        <div class="custom-field">
+                            <div class="custom-field-title">${fieldName}</div>
+                            <div class="custom-field-content">42</div>
+                        </div>
+                    `;
+                } else if (fieldType === 'bool') {
+                    customFieldHtml = `
+                        <div class="custom-field">
+                            <div class="custom-field-title">${fieldName}</div>
+                            <div class="custom-field-content">true</div>
+                        </div>
+                    `;
+                }
+                
+                customFieldsContainer.innerHTML = customFieldHtml;
+            }
+
+            // Function to update progress bar
+            function updateProgressBar() {
+                const completed = document.querySelectorAll('.progress-item.completed').length;
+                const total = document.querySelectorAll('.progress-item').length;
+                const percentage = (completed / total) * 100;
+                document.querySelector('.progress-bar-fill').style.width = `${percentage}%`;
+            }
+
+            // Reset editor
+            document.getElementById('reset-editor').addEventListener('click', function() {
+                editor.setValue(initialContractCode);
+                addMarkers();
+                document.getElementById('custom-fields').innerHTML = '';
+                document.getElementById('progress-add-field').className = 'progress-item';
+                document.getElementById('progress-add-link').className = 'progress-item';
+                document.getElementById('traditional-custom-slot').textContent = '';
+                document.getElementById('resource-group-custom-item').textContent = '';
+                updateProgressBar();
+            });
+
+            // Deployment functionality
+            document.getElementById('deploy-testnet').addEventListener('click', function() {
+                document.getElementById('deployment-status').style.display = 'block';
+                
+                // Simulate deployment process
+                setTimeout(() => {
+                    document.getElementById('status-validating').className = 'status-indicator status-complete';
+                    document.getElementById('status-compiling').className = 'status-indicator status-pending';
+                    
+                    setTimeout(() => {
+                        document.getElementById('status-compiling').className = 'status-indicator status-complete';
+                        document.getElementById('status-deploying').className = 'status-indicator status-pending';
+                        
+                        setTimeout(() => {
+                            document.getElementById('status-deploying').className = 'status-indicator status-complete';
+                            document.getElementById('status-building').className = 'status-indicator status-pending';
+                            
+                            setTimeout(() => {
+                                document.getElementById('status-building').className = 'status-indicator status-complete';
+                                document.getElementById('status-complete').className = 'status-indicator status-complete';
+                                document.getElementById('progress-deploy').className = 'progress-item completed';
+                                updateProgressBar();
+                                
+                                // Create success message
+                                const deploymentStatus = document.getElementById('deployment-status');
+                                deploymentStatus.innerHTML += `
+                                    <div style="margin-top: 1rem; padding: 0.5rem; background-color: #d4edda; border-radius: 4px; color: #155724;">
+                                        <strong>Deployment Successful!</strong><br>
+                                        Your Apt-ID profile is now available at:<br>
+                                        <a href="#" style="color: #155724; font-weight: bold;">${document.getElementById('subdomain').value}</a>
+                                    </div>
+                                `;
+                            }, 2000);
+                        }, 1500);
+                    }, 1500);
+                }, 1000);
+            });
+
+            // Test in simulation
+            document.getElementById('test-simulation').addEventListener('click', function() {
+                alert('Simulation successful! Your changes work as expected.');
+            });
+
+            // Color theme change
+            document.getElementById('primary-color').addEventListener('input', function(e) {
+                document.documentElement.style.setProperty('--primary-color', e.target.value);
+                
+                // Change profile link colors
+                const links = document.querySelectorAll('.profile-link');
+                links.forEach(link => {
+                    link.style.backgroundColor = e.target.value;
+                });
+            });
+
+            // Toggle visualization view
+            let showDetailed = false;
+            document.getElementById('toggle-view').addEventListener('click', function() {
+                showDetailed = !showDetailed;
+                
+                if (showDetailed) {
+                    document.getElementById('visualization').innerHTML = `
+                        <div style="padding: 1rem;">
+                            <h3>Transaction Flow Visualization</h3>
+                            <div style="display: flex; justify-content: space-between; margin-top: 1rem; position: relative;">
+                                <div style="text-align: center; width: 150px;">
+                                    <div style="padding: 1rem; border: 1px solid #ddd; border-radius: 4px; background-color: white;">User</div>
+                                </div>
+                                <div style="text-align: center; width: 150px;">
+                                    <div style="padding: 1rem; border: 1px solid #ddd; border-radius: 4px; background-color: white;">Frontend</div>
+                                </div>
+                                <div style="text-align: center; width: 150px;">
+                                    <div style="padding: 1rem; border: 1px solid #ddd; border-radius: 4px; background-color: white;">Blockchain</div>
+                                </div>
+                                
+                                <!-- Arrows connecting components -->
+                                <div style="position: absolute; top: 20px; left: 150px; width: 100px; height: 2px; background-color: var(--primary-color);"></div>
+                                <div style="position: absolute; top: 20px; left: 300px; width: 100px; height: 2px; background-color: var(--primary-color);"></div>
+                            </div>
+                            
+                            <div style="margin-top: 2rem;">
+                                <h4>Event Flow:</h4>
+                                <ol>
+                                    <li>User modifies profile data</li>
+                                    <li>Frontend generates transaction</li>
+                                    <li>User signs transaction</li>
+                                    <li>Transaction sent to blockchain</li>
+                                    <li>Profile state updated</li>
+                                    <li>Event emitted for indexing</li>
+                                </ol>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('visualization').innerHTML = `
+                        <div class="resource-visualization">
+                            <div class="resource-panel">
+                                <div class="resource-title">Traditional Storage</div>
+                                <div class="resource-diagram">
+                                    <div class="resource-slot">Bio</div>
+                                    <div class="resource-slot">LinkTree</div>
+                                    <div class="resource-slot">ProfileRef</div>
+                                    <div class="resource-slot" id="traditional-custom-slot"></div>
+                                </div>
+                                <div class="cost-comparison">
+                                    Storage Cost: 0.0034 APT
+                                </div>
+                            </div>
+
+                            <div class="resource-panel">
+                                <div class="resource-title">Resource Group Storage</div>
+                                <div class="resource-diagram">
+                                    <div class="resource-group">
+                                        <div class="resource-item">Bio</div>
+                                        <div class="resource-item">LinkTree</div>
+                                        <div class="resource-item">ProfileRef</div>
+                                        <div class="resource-item" id="resource-group-custom-item"></div>
+                                    </div>
+                                    <div class="resource-slot">Object Group Slot</div>
+                                </div>
+                                <div class="cost-comparison">
+                                    Storage Cost: <span class="cost-highlight">0.0012 APT</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
