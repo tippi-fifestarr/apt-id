@@ -11,6 +11,9 @@ export const NETWORK = "testnet";
 // For mainnet, use: 0x631f344549b798ad70cb5ab1842565b082fdfe488b7c6d56a257220222f6a191
 export const CONTRACT_ADDRESS = "0xaea5b834a6bcab2de9556051c200bd1dbc2f0c70f4eafced96f05ca0ff9af6dc";
 
+// Allowlist for secret feature access
+export const ALLOWLISTED_NAMES = ["greg.apt", "wingbird.apt", "greg", "wingbird"];
+
 export const APTOS_API_KEY = process.env.NEXT_PUBLIC_APTOS_API_KEY;
 export const client = new Aptos(
   new AptosConfig({

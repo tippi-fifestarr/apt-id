@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { WalletProvider } from "../components/WalletProvider";
+import { SecretButton } from "../components/SecretButton";
 import "./globals.css";
 import React from "react";
 
@@ -18,6 +19,8 @@ export default function RootLayout({
       <body>
         <WalletProvider>
           {children}
+          {/* The secret button only renders when user has allowlisted ANS name */}
+          <SecretButton />
         </WalletProvider>
       </body>
     </html>
