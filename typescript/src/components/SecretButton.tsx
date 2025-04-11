@@ -20,7 +20,7 @@ export function SecretButton() {
 
   return (
     <>
-      <div className="fixed bottom-4 right-4 z-50">
+      <div className="fixed bottom-4 right-4 z-50 secret-button">
         <Button 
           onClick={() => setIsOpen(true)}
           className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 

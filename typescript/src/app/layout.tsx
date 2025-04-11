@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { WalletProvider } from "../components/WalletProvider";
 import { SecretButton } from "../components/SecretButton";
+import { HowToUseButton } from "../components/HowToUseButton";
+import { FeedbackButton } from "../components/FeedbackButton";
+import { TurboAptosProvider, TourTooltip, TourHighlight } from "../components/TurboAptos";
+import { ClientOnly } from "../components/ClientOnly";
+import { allTours } from "../tours";
 import "./globals.css";
 import React from "react";
 
@@ -18,9 +23,21 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <WalletProvider>
+          {/* Wrap TurboAptos and all interactive components in ClientOnly to prevent SSR issues */}
+          <ClientOnly>
+            <TurboAptosProvider tours={allTours}>
+              {/* Tour UI components */}
+              <TourTooltip />
+              <TourHighlight />
+              
+              {/* Button stack in bottom right corner */}
+              <HowToUseButton />
+              <FeedbackButton />
+              <SecretButton />
+            </TurboAptosProvider>
+          </ClientOnly>
+          
           {children}
-          {/* The secret button only renders when user has allowlisted ANS name */}
-          <SecretButton />
         </WalletProvider>
       </body>
     </html>

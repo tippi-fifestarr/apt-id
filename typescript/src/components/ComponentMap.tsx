@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useTurboAptos } from "./TurboAptos";
 import { Button } from "./ui/button";
 
 /**
@@ -11,6 +12,25 @@ export function ComponentMap() {
   const [zoom, setZoom] = useState(1);
   const [activeNode, setActiveNode] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { startTour } = useTurboAptos();
+  
+  // Auto-start the component map tour when first loaded
+  useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
+    // Check if this is the first time viewing the map
+    const hasSeenMap = localStorage.getItem('componentMapTourCompleted');
+    
+    if (!hasSeenMap) {
+      // Small delay to ensure the map is fully rendered
+      const timer = setTimeout(() => {
+        startTour('component-map');
+      }, 1000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [startTour]);
 
   // Handle zoom in
   const handleZoomIn = () => {
@@ -94,7 +114,8 @@ export function ComponentMap() {
           <div className="decision-paths grid grid-cols-1 gap-8 w-full max-w-3xl">
             {/* Path 1: Evaluate Aptos */}
             <div className="decision-path">
-              <div 
+              <div
+                data-node-id="evaluate"
                 className={`decision-node p-4 rounded-lg cursor-pointer
                            ${activeNode === 'evaluate' ? 'bg-blue-200 border-2 border-blue-500' : 'bg-blue-100 border border-blue-200'}`}
                 onClick={() => handleNodeClick('evaluate')}
@@ -119,7 +140,8 @@ export function ComponentMap() {
             
             {/* Path 2: Move Contract Approach */}
             <div className="decision-path">
-              <div 
+              <div
+                data-node-id="contract"
                 className={`decision-node p-4 rounded-lg cursor-pointer
                            ${activeNode === 'contract' ? 'bg-blue-200 border-2 border-blue-500' : 'bg-blue-100 border border-blue-200'}`}
                 onClick={() => handleNodeClick('contract')}
@@ -145,7 +167,8 @@ export function ComponentMap() {
             
             {/* Path 3: Frontend Identity & Wallets */}
             <div className="decision-path">
-              <div 
+              <div
+                data-node-id="identity"
                 className={`decision-node p-4 rounded-lg cursor-pointer
                            ${activeNode === 'identity' ? 'bg-blue-200 border-2 border-blue-500' : 'bg-blue-100 border border-blue-200'}`}
                 onClick={() => handleNodeClick('identity')}
@@ -171,7 +194,8 @@ export function ComponentMap() {
             
             {/* Path 4: Data & Indexing */}
             <div className="decision-path">
-              <div 
+              <div
+                data-node-id="data"
                 className={`decision-node p-4 rounded-lg cursor-pointer
                            ${activeNode === 'data' ? 'bg-blue-200 border-2 border-blue-500' : 'bg-blue-100 border border-blue-200'}`}
                 onClick={() => handleNodeClick('data')}
@@ -197,7 +221,8 @@ export function ComponentMap() {
             
             {/* Path 5: Deployment & Testing */}
             <div className="decision-path">
-              <div 
+              <div
+                data-node-id="deployment"
                 className={`decision-node p-4 rounded-lg cursor-pointer
                            ${activeNode === 'deployment' ? 'bg-blue-200 border-2 border-blue-500' : 'bg-blue-100 border border-blue-200'}`}
                 onClick={() => handleNodeClick('deployment')}
