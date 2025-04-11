@@ -141,9 +141,49 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h1 className="text-3xl font-bold text-white">Apt ID</h1>
-              <div className="flex flex-col items-center gap-4">
-                <p className="text-white/80 text-center">Connect your wallet to create your profile</p>
+              <h1 className="text-5xl font-bold text-white mb-3">My Hackathon Project</h1>
+              <h2 className="text-2xl text-white/90 mb-6">Your Gateway to Building on Aptos</h2>
+              
+              <div className="flex flex-col items-center gap-6">
+                <p className="text-white/80 text-center text-lg max-w-md">
+                  Connect your wallet to start building your next great idea on Aptos. An easy way to jumpstart your hackathon project.
+                </p>
+                
+                <div className="flex gap-4 mt-4">
+                  <button
+                    className="bg-white text-purple-600 px-6 py-3 rounded-lg font-medium shadow-lg hover:bg-purple-50 transition-colors"
+                    onClick={() => (document.querySelector('.wallet-selector-button') as HTMLElement)?.click()}
+                  >
+                    Connect Wallet
+                  </button>
+                  
+                  <button
+                    className="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-colors"
+                    onClick={() => (document.querySelector('.how-to-use-button') as HTMLElement)?.click()}
+                  >
+                    How to Use
+                  </button>
+                </div>
+              </div>
+              
+              <div className="grid md:grid-cols-3 gap-6 mt-12 w-full max-w-3xl">
+                <div className="bg-white/20 backdrop-blur-sm p-6 rounded-lg shadow-lg">
+                  <div className="text-3xl mb-3">🚀</div>
+                  <h3 className="text-lg font-semibold text-white mb-2">Quick Start</h3>
+                  <p className="text-white/80">Fork this repo to jumpstart your hackathon project with everything you need</p>
+                </div>
+                
+                <div className="bg-white/20 backdrop-blur-sm p-6 rounded-lg shadow-lg">
+                  <div className="text-3xl mb-3">🔗</div>
+                  <h3 className="text-lg font-semibold text-white mb-2">Resource Hub</h3>
+                  <p className="text-white/80">Access all the essential resources for Aptos development in one place</p>
+                </div>
+                
+                <div className="bg-white/20 backdrop-blur-sm p-6 rounded-lg shadow-lg">
+                  <div className="text-3xl mb-3">⚡</div>
+                  <h3 className="text-lg font-semibold text-white mb-2">Learn as You Build</h3>
+                  <p className="text-white/80">Discover Aptos ecosystem components through interactive guides</p>
+                </div>
               </div>
             </div>
           ) : (

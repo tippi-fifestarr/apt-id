@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { WalletProvider } from "../components/WalletProvider";
-import { SecretButton } from "../components/SecretButton";
-import { HowToUseButton } from "../components/HowToUseButton";
-import { FeedbackButton } from "../components/FeedbackButton";
+import { ButtonStack } from "../components/ButtonStack";
 import { TurboAptosProvider, TourTooltip, TourHighlight } from "../components/TurboAptos";
 import { ClientOnly } from "../components/ClientOnly";
 import { allTours } from "../tours";
@@ -10,8 +8,8 @@ import "./globals.css";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "Apt ID",
-  description: "Your Profile into Aptos Identity",
+  title: "My Hackathon Project",
+  description: "Your Gateway to Building on Aptos",
 };
 
 export default function RootLayout({
@@ -31,9 +29,7 @@ export default function RootLayout({
               <TourHighlight />
               
               {/* Button stack in bottom right corner */}
-              <HowToUseButton />
-              <FeedbackButton />
-              <SecretButton />
+              <ButtonStack />
             </TurboAptosProvider>
           </ClientOnly>
           

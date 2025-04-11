@@ -83,10 +83,12 @@ export function WalletSelector() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button 
-          className="w-[200px] px-4 py-[14px] sm:py-4 text-[14px] sm:text-[16px] 
-                   font-semibold text-center bg-white/90 hover:bg-white text-[#000000] 
-                   rounded-[14px] transition-all duration-200 shadow-md hover:scale-[1.02]"
+        <Button
+          className="wallet-selector-button w-[200px] px-4 py-[14px] sm:py-4 text-[14px] sm:text-[16px]
+                   font-semibold text-center bg-gradient-to-r from-purple-600 to-indigo-600
+                   hover:from-purple-700 hover:to-indigo-700 text-white
+                   rounded-[14px] transition-all duration-200 shadow-lg hover:shadow-xl animate-pulse hover:animate-none
+                   hover:scale-[1.02]"
         >
           Connect Wallet
         </Button>

@@ -74,12 +74,12 @@ export function TopBar() {
         <Link href="/" className="flex items-center gap-2 relative">
           <Image
             src="/favicon.ico"
-            alt="Apt ID"
+            alt="My Hackathon Project"
             width={32}
             height={32}
           />
-          <span className="font-semibold text-gray-800">Apt ID</span>
-          <span className="absolute -top-2 -right-12 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full transform rotate-12 font-bold">
+          <span className="font-semibold text-gray-800">My Hackathon Project</span>
+          <span className="absolute -top-2 -right-6 bg-purple-600 text-white text-xs px-2 py-0.5 rounded-full transform rotate-12 font-bold">
             BETA
           </span>
         </Link>

@@ -8,6 +8,7 @@ import { ComponentMapDialog } from "./ComponentMapDialog";
 /**
  * A secret button that appears only for users with allowlisted ANS names
  * Provides access to the interactive component map
+ * To be used within the ButtonStack component
  */
 export function SecretButton() {
   const { isAllowlisted, loading } = useAllowlistedName();
@@ -20,8 +21,8 @@ export function SecretButton() {
 
   return (
     <>
-      <div className="fixed bottom-4 right-4 z-50 secret-button">
-        <Button 
+      <div className="secret-button">
+        <Button
           onClick={() => setIsOpen(true)}
           className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 
                      shadow-lg hover:shadow-xl transition-all duration-300 animate-pulse group"

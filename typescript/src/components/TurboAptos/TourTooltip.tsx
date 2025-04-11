@@ -87,8 +87,38 @@ export function TourTooltip() {
       }
       
       if (top < 10) top = 10;
+      
+      // Check if the tooltip would go off the bottom of the screen
       if (top + tooltipHeight > window.innerHeight + window.scrollY - 10) {
-        top = window.innerHeight + window.scrollY - tooltipHeight - 10;
+        // Try positioning above the target instead
+        top = rect.top + window.scrollY - tooltipHeight - margin;
+        
+        // If that would go off the top, put it at the top with a small margin
+        if (top < 10) top = 10;
+      }
+      
+      // Special case for elements at the bottom-right corner (like Secret Button in step 8)
+      if (rect.bottom > window.innerHeight - 100 && rect.right > window.innerWidth - 100) {
+        console.log('Bottom-right element detected, repositioning tooltip');
+        // Position tooltip above and to the left of the element
+        top = rect.top + window.scrollY - tooltipHeight - margin * 2;
+        left = rect.left + window.scrollX - tooltipWidth / 2;
+        
+        // Ensure we're still within bounds
+        if (left < 10) left = 10;
+        if (top < 10) top = 10;
+      }
+      
+      // Special case for the Secret Button step in How to Use tour
+      if (
+        activeTour?.id === 'how-to-use' &&
+        currentStepIndex === 7 && // 0-indexed, so 7 is the 8th step
+        currentStep.targetSelector?.includes('secret-button')
+      ) {
+        console.log('Secret button step detected, applying special positioning');
+        // Always position tooltip above and to the left of the secret button
+        top = rect.top + window.scrollY - tooltipHeight - margin * 2;
+        left = Math.max(10, rect.left + window.scrollX - tooltipWidth / 2);
       }
       
       setPosition({ top, left });
@@ -118,13 +148,27 @@ export function TourTooltip() {
   const progress = ((currentStepIndex + 1) / activeTour.steps.length) * 100;
   
   return (
-    <div
-      className="fixed z-50 bg-white rounded-lg shadow-xl p-4 w-[300px] tour-tooltip"
-      style={{
-        top: `${position.top}px`,
-        left: `${position.left}px`,
-      }}
-    >
+    <>
+      {/* Dark overlay to highlight the focused element */}
+      <div
+        className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
+        style={{
+          opacity: isTourActive ? 0.5 : 0,
+          pointerEvents: isTourActive ? 'auto' : 'none'
+        }}
+        onClick={(e) => e.stopPropagation()} // Prevent clicks through the overlay
+      />
+      
+      {/* Tooltip */}
+      <div
+        className="fixed z-50 bg-white rounded-lg shadow-xl p-4 w-[300px] tour-tooltip"
+        style={{
+          top: `${position.top}px`,
+          left: `${position.left}px`,
+          maxHeight: '400px',
+          overflowY: 'auto'
+        }}
+      >
       {/* Tour Title */}
       <div className="text-sm text-gray-500 mb-1">
         {activeTour.title} ({currentStepIndex + 1}/{activeTour.steps.length})
@@ -190,5 +234,6 @@ export function TourTooltip() {
         </div>
       </div>
     </div>
+    </>
   );
 }
