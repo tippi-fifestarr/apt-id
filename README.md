@@ -1,26 +1,21 @@
-# Apt ID
+# My Hackathon Project
 
-![Screenshot](Screenshot.png)
+![Screenshot](MHP.png)
 
-## What is Apt ID?
+## What is My Hackathon Project?
 
-Apt ID is a decentralized profile platform built on the Aptos blockchain. It functions similarly to Linktree, allowing users to create a profile linked to their Aptos Name Service (ANS) name where they can add biographical information and links to various platforms.
+My Hackathon Project is an interactive learning experience designed for hackathon participants to quickly understand how to build fullstack dApps on Aptos. It serves as both a demonstration of Aptos capabilities and a starter template that can be easily forked and customized for hackathon projects.
 
-> "At the end of 2024, I was kind of getting bored of doing my normal day-to-day job and I wanted to have something a little bit more fun and a little more exciting. So we decided, all right, let's make a decentralized link tree." *- Greg Nazario, Creator*
-
-The platform showcases key features of the Aptos blockchain and Move programming language while providing utility to ANS name owners.
+The platform showcases key features of the Aptos blockchain and Move programming language while providing hands-on learning through guided tours, interactive elements, and comprehensive documentation.
 
 ## Features
 
+- **Interactive Guided Tours**: Step-by-step walkthroughs of key concepts and features
+- **Component Map**: Visual representation of Aptos ecosystem components and relationships
 - **Profile Creation**: Create a personal profile linked to your ANS name
-- **Bio Management**: Set your name, description, and avatar image
-- **Link Management**: Add, edit, and remove links to various platforms
-- **Public Profile Viewing**: Share your profile with a clean, responsive UI
-- **NFT Avatar Support**: (In development) Use NFTs as profile pictures
-
-## Live Demo
-
-Visit [Apt ID](https://aptid.xyz) to see the platform in action (on mainnet).
+- **Bio & Link Management**: Manage your profile information and external links
+- **Code Corner**: Quick access to both frontend and backend code examples
+- **TurboTax-Style Guidance**: Intuitive decision-making process for building dApps
 
 ## Technology Stack
 
@@ -30,7 +25,7 @@ Visit [Apt ID](https://aptid.xyz) to see the platform in action (on mainnet).
 - **Name Resolution**: Aptos Name Service (ANS)
 - **Styling**: Tailwind CSS
 
-## Development
+## Getting Started
 
 ### Prerequisites
 
@@ -43,8 +38,8 @@ Visit [Apt ID](https://aptid.xyz) to see the platform in action (on mainnet).
 
 1. Clone the repository:
    ```
-   git clone https://github.com/aptos-labs/apt-id.git
-   cd apt-id
+   git clone https://github.com/aptoslabs/hackathon-project.git
+   cd hackathon-project
    ```
 
 2. Install frontend dependencies:
@@ -58,8 +53,6 @@ Visit [Apt ID](https://aptid.xyz) to see the platform in action (on mainnet).
    pnpm dev  # or npm run dev
    ```
 
-> **Note:** "pnpm is faster" *- Greg*
-
 4. Open your browser and navigate to `http://localhost:3000`
 
 > **Note:** The application is configured to use testnet by default. You can modify the `constants.ts` file to switch to mainnet.
@@ -71,7 +64,7 @@ Visit [Apt ID](https://aptid.xyz) to see the platform in action (on mainnet).
    cd move/
    ```
 
-2. Compile the contract using that Aptos CLI:
+2. Compile the contract using the Aptos CLI:
    ```
    aptos move compile
    ```
@@ -83,18 +76,40 @@ Visit [Apt ID](https://aptid.xyz) to see the platform in action (on mainnet).
 
 4. Update the `CONTRACT_ADDRESS` in `typescript/src/constants.ts` with your deployed contract address.
 
+## Interactive Learning Elements
+
+### 1. Guided Tours
+
+The application includes interactive tours that guide users through various aspects of the platform:
+
+- **How to Use Tour**: Basic introduction to the application functionality
+- **Component Map Tour**: Deep dive into Aptos ecosystem components
+
+### 2. Code Corner
+
+A page corner flip component that allows switching between frontend and backend code examples:
+
+- **Frontend Code**: Next.js, React, and TailwindCSS implementation details
+- **Backend Code**: Move smart contract examples and explanations
+
+### 3. TurboTax-Style Decision Making
+
+A step-by-step wizard that helps users make decisions about their Aptos dApp:
+
+- Choose appropriate components
+- Understand tradeoffs
+- Get recommendations based on project requirements
+
 ## Architecture
 
 ### Smart Contract (Move)
 
-The core of Apt ID is a Move contract that manages profile data on-chain:
+The core functionality is powered by a Move contract that manages profile data on-chain:
 
 - **Bio**: Stores profile information (name, description, avatar)
 - **LinkTree**: Manages links using a SimpleMap
 - **ProfileRef**: Associates accounts with profile objects
 - **Events**: Emitted for indexing profile creations and updates
-
-The contract leverages Aptos' object model, allowing data to be associated with users rather than contracts:
 
 ```move
 struct Bio has key, store {
@@ -106,69 +121,45 @@ struct Bio has key, store {
 
 ### Frontend (Next.js)
 
-The frontend provides a user-friendly interface for profile management:
+The frontend provides a user-friendly interface with:
 
 - **Public Profiles**: Resolved from ANS names (e.g., `username.apt`)
 - **Profile Editor**: For authenticated users to manage their profiles
 - **Wallet Connection**: Using Aptos Connect for authentication
+- **Interactive UI Elements**: Tours, tooltips, and guided experiences
 - **Responsive Design**: For optimal viewing on all devices
 
-## Key Technical Concepts
+## Implementation Progress
 
-### Resource Groups
+### Completed
 
-The contract uses Aptos resource groups for efficient storage:
+- ✅ Rebranding to "My Hackathon Project"
+- ✅ Enhanced UI with clearer calls to action
+- ✅ Fixed tooltip positioning with darkened background
+- ✅ Improved button organization with conditional rendering
+- ✅ Added Code Corner Flip for frontend/backend code viewing
+- ✅ Implemented Map button placeholder
+- ✅ Enhanced text readability and component visibility
 
-```move
-#[resource_group_member(group = aptos_framework::object::ObjectGroup)]
-```
+### In Progress
 
-This allows related resources to be co-located in the same storage slot for faster access and better efficiency.
-
-### Aptos Object Model
-
-The project demonstrates the Object model, which provides:
-
-- Ownership and transfer capabilities
-- Co-location of related resources
-- Composability (e.g., attaching NFTs to profiles)
-
-### Zero Address Ownership
-
-A unique pattern is used for NFT handling:
-
-```move
-// Hard-coded 0x0 to ensure no one can own this object
-let owner = @0x0;
-```
-
-This prevents special privileges for the object owner since no one can sign for the zero address.
-
-## Best Practices
-
-Based on experience:
-
-1. **Add Events Early**: Make sure to include events in your contract from the beginning for easier indexing:
-   > "You got to remember to put events in your contract beforehand or it's really hard to index."
-
-2. **Start with Private Functions**: Don't make functions public until necessary:
-   > "Don't make things public unless you have to because then you can't change them."
-
-3. **Test on Testnet**: Always test thoroughly on testnet before deploying to mainnet.
-
-4. **Package Naming**: Use unique names for packages to avoid conflicts:
-   > "It should be a unique name for your product that isn't common among everything else."
-
-5. **Address Management**: Use named addresses with placeholders for flexible deployment.
+- 🔄 TurboTax-style component map
+- 🔄 Knowledge collection system
+- 🔄 Resource link collection
+- 🔄 Enhanced project boilerplate structure
 
 ## Contributing
 
 Feel free to fork this project and build your own version or extension. If you've made improvements that you think would benefit the original project, open a pull request.
 
-For feature requests or bug reports, open a GitHub issue [here](https://github.com/aptos-labs/apt-id/issues).
+For feature requests or bug reports, open a GitHub issue [here](https://github.com/aptoslabs/hackathon-project/issues).
 
 ## License
 
 [MIT License](typescript/LICENSE)
 
-![Apt ID](typescript/public/aptos.png)
+---
+
+*This project is designed as an interactive learning experience for the Aptos May 2025 Hackathon.*
+
+![Aptos Logo](typescript/public/aptos.png)

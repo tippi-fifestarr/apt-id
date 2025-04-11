@@ -151,7 +151,7 @@ export function TourTooltip() {
     <>
       {/* Dark overlay to highlight the focused element */}
       <div
-        className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
+        className="fixed inset-0 bg-black/80 z-40 transition-opacity duration-300"
         style={{
           opacity: isTourActive ? 0.5 : 0,
           pointerEvents: isTourActive ? 'auto' : 'none'

@@ -3,6 +3,7 @@
 import { useAllowlistedName } from "@/hooks/useAllowlistedName";
 import { HowToUseButton } from "./HowToUseButton";
 import { FeedbackButton } from "./FeedbackButton";
+import { MapButton } from "./MapButton";
 import { SecretButton } from "./SecretButton";
 
 /**
@@ -14,6 +15,11 @@ export function ButtonStack() {
 
   return (
     <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50 max-h-[calc(100vh-48px)] overflow-y-auto">
+      {/* Always show the Map button at the top of the stack */}
+      <div className="map-button-container">
+        <MapButton />
+      </div>
+      
       {/* Only show How to Use button if Secret Button is not visible */}
       {!isAllowlisted && !loading && (
         <div className="how-to-use-container">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { WalletProvider } from "../components/WalletProvider";
 import { ButtonStack } from "../components/ButtonStack";
+import { CodeCornerFlip } from "../components/CodeCornerFlip";
 import { TurboAptosProvider, TourTooltip, TourHighlight } from "../components/TurboAptos";
 import { ClientOnly } from "../components/ClientOnly";
 import { allTours } from "../tours";
@@ -30,6 +31,9 @@ export default function RootLayout({
               
               {/* Button stack in bottom right corner */}
               <ButtonStack />
+              
+              {/* Code corner flip in bottom left */}
+              <CodeCornerFlip />
             </TurboAptosProvider>
           </ClientOnly>
           
