@@ -5,7 +5,8 @@ import { Tour } from '@/components/TurboAptos';
 
 /**
  * Tour configuration for guiding users through the interactive component map
- * This tour explains the Aptos ecosystem and developer decision pathways
+ * This tour explains the Aptos ecosystem, developer decision pathways,
+ * and the new TurboApt guided experience
  */
 export const componentMapTour: Tour = {
   id: 'component-map',
@@ -27,6 +28,26 @@ export const componentMapTour: Tour = {
         </div>
       ),
       position: 'bottom'
+    },
+    {
+      id: 'view-toggle',
+      title: 'Map & Guided Views',
+      content: (
+        <div className="space-y-3">
+          <p>
+            You can explore the component map in two different ways:
+          </p>
+          <ul className="list-disc pl-5 text-sm">
+            <li><strong>Map View:</strong> See all decision points at once for a comprehensive overview</li>
+            <li><strong>Guided View:</strong> Step-by-step wizard experience, like TurboTax</li>
+          </ul>
+          <p>
+            Click this button to switch between views at any time.
+          </p>
+        </div>
+      ),
+      position: 'bottom',
+      targetSelector: '.mode-toggle button'
     },
     {
       id: 'decision-pathway',
@@ -167,6 +188,95 @@ export const componentMapTour: Tour = {
       targetSelector: '[data-node-id="deployment"]'
     },
     {
+      id: 'try-guided-view',
+      title: 'Try the Guided View',
+      content: (
+        <div className="space-y-3">
+          <p>
+            Now let&apos;s try the <strong>Guided View</strong> for a step-by-step experience!
+          </p>
+          <p>
+            Click this button to switch to the TurboTax-style wizard that will guide you through each decision one at a time.
+          </p>
+        </div>
+      ),
+      position: 'bottom',
+      targetSelector: '.mode-toggle button'
+    },
+    {
+      id: 'guided-view-intro',
+      title: 'Guided Decision Experience',
+      content: (
+        <div className="space-y-3">
+          <p>
+            In the <strong>Guided View</strong>, you&apos;ll be presented with one decision at a time, along with detailed information to help you choose.
+          </p>
+          <p>
+            This view provides a more focused experience, perfect for methodically working through your project decisions.
+          </p>
+        </div>
+      ),
+      position: 'bottom',
+      targetSelector: '.decision-wizard'
+    },
+    {
+      id: 'decision-options',
+      title: 'Decision Options',
+      content: (
+        <div className="space-y-3">
+          <p>
+            Each step presents you with <strong>decision options</strong> to choose from.
+          </p>
+          <p>
+            Select the option that best fits your project needs. Recommended options are highlighted with a green border.
+          </p>
+          <p className="text-sm text-gray-600">
+            Click an option to select it, then click Next to proceed.
+          </p>
+        </div>
+      ),
+      position: 'bottom',
+      targetSelector: '.decision-options'
+    },
+    {
+      id: 'link-challenges',
+      title: 'Link Challenges',
+      content: (
+        <div className="space-y-3">
+          <p>
+            Some steps include <strong>Link Challenges</strong> that ask you to find and provide specific URLs.
+          </p>
+          <p>
+            These challenges help you discover important resources like documentation, tools, and examples that will be useful for your project.
+          </p>
+          <p className="text-sm text-gray-600">
+            Enter the requested URL and click Verify to proceed.
+          </p>
+        </div>
+      ),
+      position: 'bottom',
+      targetSelector: '.link-challenge'
+    },
+    {
+      id: 'progress-tracking',
+      title: 'Progress Tracking',
+      content: (
+        <div className="space-y-3">
+          <p>
+            Your progress is tracked and saved automatically as you make decisions.
+          </p>
+          <p>
+            The dots at the bottom show your current position in the decision flow. Completed steps are shown in purple.
+          </p>
+          <p className="text-sm text-gray-600">
+            You can use Previous and Next buttons to navigate between steps.
+          </p>
+        </div>
+      ),
+      position: 'bottom',
+      targetSelector: '.navigation-controls'
+    },
+    {
       id: 'tour-complete',
       title: 'Ready to Build!',
       content: (
@@ -175,8 +285,7 @@ export const componentMapTour: Tour = {
             You&apos;ve completed the tour of the Aptos Component Map!
           </p>
           <p>
-            You now understand the key decision points when building on Aptos.
-            Feel free to explore the map on your own by clicking on different nodes.
+            You now understand both the Map View and Guided View options for exploring the Aptos ecosystem.
           </p>
           <div className="bg-purple-100 p-2 rounded text-sm">
             <strong>✨ Next Steps:</strong> Choose your decision path and start building your
