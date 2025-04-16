@@ -5,14 +5,15 @@ import { useTurboAptos } from "./TurboAptos";
 import { Button } from "./ui/button";
 import decisionPoints from "@/data/decision-points";
 import { ComponentMapMode, UserProgress } from "@/types/component-map";
+import { Wand2, GitBranch, Code } from "lucide-react";
 
 /**
  * Interactive component map visualization that displays the Aptos ecosystem
- * and hacker decision pathways with TurboTax-style guided mode
+ * and hacker decision pathways with multiple view options
  */
 export function ComponentMap() {
-  // View mode state (map or turboApt)
-  const [mode, setMode] = useState<ComponentMapMode>('map');
+  // View mode state (map, turboApt, or features)
+  const [mode, setMode] = useState<ComponentMapMode | 'features'>('features');
   
   // Existing states for map view
   const [zoom, setZoom] = useState(1);
@@ -156,17 +157,105 @@ export function ComponentMap() {
   const canProceed = userProgress.selectedOptions[currentStep] || 
     (currentDecision?.linkChallenge && userProgress.providedLinks[currentStep]);
 
+  // If we're showing the initial view with the three buttons
+  if (mode === 'features') {
+    return (
+      <div className="component-map-container">
+        <div className="flex flex-col items-center justify-center h-full py-8">
+          <h2 className="text-2xl font-bold mb-10 text-center">Choose Your Experience</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl mb-8">
+            {/* Guided Wizard Card */}
+            <div 
+              onClick={() => setMode('turboApt')}
+              className="cursor-pointer bg-gradient-to-b from-purple-600 to-blue-600 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+            >
+              <div className="p-8 flex flex-col items-center text-white h-full">
+                <div className="w-16 h-16 flex items-center justify-center mb-4">
+                  <Wand2 size={40} />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-center">Guided Wizard</h3>
+                <p className="text-sm text-center opacity-90">
+                  Step-by-step decision guide with interactive challenges
+                </p>
+              </div>
+            </div>
+            
+            {/* Flow Diagram Card */}
+            <div 
+              onClick={() => setMode('map')}
+              className="cursor-pointer bg-gradient-to-b from-blue-600 to-cyan-600 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1"
+            >
+              <div className="p-8 flex flex-col items-center text-white h-full">
+                <div className="w-16 h-16 flex items-center justify-center mb-4">
+                  <GitBranch size={40} />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-center">Flow Diagram</h3>
+                <p className="text-sm text-center opacity-90">
+                  Visual overview of all components and decision points
+                </p>
+              </div>
+            </div>
+            
+            {/* Inside This dApp Card */}
+            <div 
+              className="cursor-pointer bg-gradient-to-b from-slate-600 to-slate-800 rounded-lg overflow-hidden shadow-lg transition-all"
+            >
+              <div className="p-8 flex flex-col items-center text-white h-full">
+                <div className="w-16 h-16 flex items-center justify-center mb-4">
+                  <Code size={40} />
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-center">Inside This dApp</h3>
+                <p className="text-sm text-center opacity-90">
+                  Explore how this application is built (Coming Soon)
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="text-center text-gray-600 max-w-lg">
+            <p>
+              Select any option above to explore different aspects of building on 
+              Aptos. You can switch between views at any time.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  // Otherwise, render the selected mode (map or turboApt)
   return (
     <div className="component-map-container">
       {/* Mode toggle */}
-      <div className="mode-toggle mb-4">
+      <div className="mode-toggle mb-4 flex gap-2">
         <Button 
-          onClick={() => setMode(mode === 'map' ? 'turboApt' : 'map')}
+          onClick={() => setMode('features')}
           className="mb-2"
           variant="outline"
         >
-          Switch to {mode === 'map' ? 'Guided' : 'Map'} View
+          ← Back to Options
         </Button>
+        
+        {mode === 'map' && (
+          <Button 
+            onClick={() => setMode('turboApt')}
+            className="mb-2 ml-auto"
+            variant="outline"
+          >
+            Switch to Guided View
+          </Button>
+        )}
+        
+        {mode === 'turboApt' && (
+          <Button 
+            onClick={() => setMode('map')}
+            className="mb-2 ml-auto"
+            variant="outline"
+          >
+            Switch to Map View
+          </Button>
+        )}
       </div>
       
       {/* Show zoom controls only in map mode */}
@@ -370,7 +459,7 @@ export function ComponentMap() {
             {/* Connection lines would be SVG paths in a production implementation */}
             
             <div className="mt-12 text-center text-gray-500 max-w-2xl">
-              <p className="mb-2 italic">This is an exclusive interactive map only available to users with specific ANS names.</p>
+              <p className="mb-2 italic">This interactive map helps you understand developer decision pathways on Aptos.</p>
               <p>Click on any decision point above to see more details. In a full implementation, 
                  this would include animated connections between components and detailed diagrams for each technology.</p>
             </div>

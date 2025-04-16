@@ -12,7 +12,7 @@ interface ComponentMapDialogProps {
 
 /**
  * Dialog component that displays the interactive component map
- * Only shown when activated by the SecretButton
+ * Opens when the MapButton is clicked
  */
 export function ComponentMapDialog({ open, onOpenChange }: ComponentMapDialogProps) {
   const { startTour } = useTurboAptos();
@@ -39,7 +39,6 @@ export function ComponentMapDialog({ open, onOpenChange }: ComponentMapDialogPro
           <DialogTitle className="flex items-center gap-2">
             <span className="text-purple-600">✨</span>
             Aptos Ecosystem Component Map
-            <span className="text-xs text-gray-500 ml-2">(Secret Access)</span>
           </DialogTitle>
         </DialogHeader>
         <div className="overflow-auto p-4 h-[70vh]">
