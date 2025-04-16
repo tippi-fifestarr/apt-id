@@ -59,77 +59,90 @@ This document provides an update on the enhancements we've implemented for the h
 
 ### 1. TurboTax-Style Component Map (🔄 IN PROGRESS)
 
-- Design and implement dual mode support:
-  - Traditional map view showing all components simultaneously
-  - Step-by-step wizard mode presenting one decision at a time
+- Core infrastructure implemented:
+  - TurboAptos provider and context created
+  - Tour highlighting and tooltips system working
+  - Basic ComponentMap integration implemented
+  
+- Remaining implementation:
+  - Dual mode support (map and step-by-step wizard)
+  - Interactive challenges and validation
+  - Progress tracking with localStorage
+  - Smart contract integration placeholders
 
-- Interactive link challenges:
-  - Create challenge component for user input
-  - Implement validation logic
-  - Track challenge completion
+### 2. Knowledge Collection System (🔄 IN PROGRESS)
 
-- Progress tracking:
-  - Store user progress in localStorage
-  - Allow resuming from last completed step
-  - Display progress indicators
+- Initial planning completed:
+  - Data model for knowledge items defined
+  - InfoTooltip component skeleton created
+  - Knowledge storage mechanism designed
 
-- Smart contract integration:
-  - Prepare placeholders for future verification
-  - Plan data structure for on-chain tracking
+- Next implementation steps:
+  - Complete InfoTooltip component integration
+  - Build KnowledgeNotebook interface
+  - Implement knowledge discovery tracking
+  - Create initial set of knowledge content
 
-### 2. Knowledge Collection System (⏳ PLANNED)
+### 3. Resource Link Collection (🔄 IN PROGRESS)
 
-- InfoTooltip component:
-  - Create tooltips for learning key concepts
-  - Track discovered knowledge items
-  - Provide visual indicators for new/undiscovered items
+- Initial structure established:
+  - Resource categories identified (docs, tools, examples)
+  - Storage mechanism defined
+  - UI component design completed
 
-- KnowledgeNotebook component:
-  - Implement notebook interface for viewing collected knowledge
-  - Add category filtering
-  - Create progress tracking mechanism
+- Remaining implementation:
+  - Populate with curated Aptos documentation links
+  - Add code examples and template references
+  - Implement favorites/bookmarking functionality
+  - Add sorting and filtering options
 
-- Knowledge data structure:
-  - Define data model for knowledge items
-  - Create initial content set
-  - Implement persistence mechanism
+### 4. Enhanced Project Boilerplate (🔄 IN PROGRESS)
 
-### 3. Homepage Enhancements (⏳ PLANNED)
+- Documentation improvements:
+  - Added technical specification and component design docs
+  - Enhanced README with implementation progress
+  - Created architecture overview docs
 
-- Update main page with clearer calls to action:
-  - Larger, more prominent text
-  - Better button placement and styling
-  - Feature grid highlighting key benefits
+- Next steps:
+  - Complete file structure reorganization
+  - Add detailed code comments
+  - Improve template extension points
+  - Create quick-start guide for forking
 
-- Improve onboarding experience:
-  - Clearer instructions for getting started
-  - Visual cues for important actions
-  - Progress indicators for setup steps
+## Best Practices Implementation
 
-### 4. Additional Features (🔮 FUTURE)
+### UI Component Standards (⚡ NEW)
 
-- Resource Link Collection:
-  - Curated links to Aptos documentation
-  - Code examples and templates
-  - Community resources
+- Standard UI components:
+  - All new components should use the shadcn/ui components from `typescript/src/components/ui`
+  - Use `Button` component for all button elements with proper variants
+  - Use `Card` components for content containers
+  - Use `Dialog` for modal interfaces
+  - Apply consistent styling through utility classes
 
-- Project Boilerplate Structure:
-  - Well-organized file structure
-  - Reusable components
-  - Clear documentation for cloning and extension
+- Accessibility improvements:
+  - Ensure proper aria-labels on interactive elements
+  - Maintain color contrast ratios for text visibility
+  - Support keyboard navigation across the application
+  - Provide text alternatives for visual elements
 
-- Personalization Options:
-  - Ability to save favorite resources
-  - Custom theme or appearance settings
-  - Profile information for hackathon participants
+### New Inspector Mode (⚡ PLANNED)
+
+- New profile inspection feature:
+  - "Activate Inspector" button below "Edit Profile"/"View Your Public Profile"
+  - Screen darkening effect for non-inspectable elements
+  - Highlighted interactive elements (wallet connect, search, buttons, links)
+  - Information tooltips for each highlighted element
+  - Easy toggle on/off with escape key
 
 ## Next Steps
 
 Based on our progress, we'll prioritize the following tasks:
 
 1. Complete the TurboTax-style component map implementation
-2. Implement the Knowledge Collection System
-3. Enhance the homepage with clearer calls to action
-4. Add resource link collection
+2. Finish the Knowledge Collection System
+3. Implement the Inspector Mode for profiles
+4. Enhance the homepage with clearer calls to action
+5. Complete the resource link collection
 
 These enhancements will create a comprehensive learning experience for hackathon participants while showcasing the capabilities of the Aptos blockchain ecosystem.

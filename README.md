@@ -133,20 +133,33 @@ The frontend provides a user-friendly interface with:
 
 ### Completed
 
-- ✅ Rebranding to "My Hackathon Project"
-- ✅ Enhanced UI with clearer calls to action
-- ✅ Fixed tooltip positioning with darkened background
-- ✅ Improved button organization with conditional rendering
-- ✅ Added Code Corner Flip for frontend/backend code viewing
-- ✅ Implemented Map button placeholder
-- ✅ Enhanced text readability and component visibility
+- ✅ Rebranding to "My Hackathon Project" throughout the application
+- ✅ Enhanced UI with clearer calls to action and improved visuals
+- ✅ Fixed tooltip positioning with darkened background (80% opacity)
+- ✅ Improved button organization with conditional rendering via ButtonStack component
+- ✅ Added Code Corner Flip for frontend/backend code viewing in bottom left corner
+- ✅ Implemented Map button placeholder with enhanced visual design
+- ✅ Enhanced text readability and component visibility with backdrop effects
 
 ### In Progress
 
-- 🔄 TurboTax-style component map
-- 🔄 Knowledge collection system
-- 🔄 Resource link collection
-- 🔄 Enhanced project boilerplate structure
+- 🔄 TurboTax-style component map (core implementation ready, guided tour integration ongoing)
+- 🔄 Knowledge collection system (InfoTooltip and KnowledgeNotebook components planned)
+- 🔄 Resource link collection with curated Aptos documentation
+- 🔄 Enhanced project boilerplate structure for easier forking
+- 🆕 Profile Inspector feature (highlighting UI elements with explanations)
+
+### Related Documentation
+
+For more detailed information about the project implementation, refer to these internal documents:
+
+- [Technical Specification](./apt-id-technical-specification.md) - Comprehensive technical blueprint
+- [Component Map Design](./apt-id-component-map-design.md) - Interactive component map details
+- [TurboTax Enhancements](./apt-id-turbotax-enhancements.md) - Guided experience improvements
+- [Implementation Progress](./updated-hackathon-project-progress.md) - Detailed status report
+- [Inspector Feature Specification](./apt-id-inspector-feature-specification.md) - New UI learning tool
+- [Inspector Implementation Guide](./apt-id-inspector-implementation-guide.md) - Best practices for Inspector feature
+- [Inspector Visual Guide](./apt-id-inspector-visual-guide.md) - UI mockups and interaction patterns
 
 ## Contributing
 
