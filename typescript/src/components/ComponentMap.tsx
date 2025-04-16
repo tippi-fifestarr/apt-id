@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import decisionPoints from "@/data/decision-points";
 import { ComponentMapMode, UserProgress } from "@/types/component-map";
 import { Wand2, GitBranch, Code } from "lucide-react";
+import { FlowDiagram } from "./FlowDiagram";
 
 /**
  * Interactive component map visualization that displays the Aptos ecosystem
@@ -128,15 +129,37 @@ export function ComponentMap() {
     }
   };
   
-  // TurboApt mode: Handle option selection
+  // Handle option selection - shared between both views
   const handleOptionSelect = (decisionId: string, optionId: string) => {
-    setUserProgress(prev => ({
-      ...prev,
-      selectedOptions: {
-        ...prev.selectedOptions,
-        [decisionId]: optionId
+    // Find the decision point
+    const decision = decisionPoints.find(d => d.id === decisionId);
+    if (!decision) return;
+    
+    // Find the selected option
+    const option = decision.options.find(o => o.id === optionId);
+    if (!option) return;
+    
+    // Update user progress
+    setUserProgress(prev => {
+      // If this is a new selection for this decision
+      const isNewSelection = prev.selectedOptions[decisionId] !== optionId;
+      
+      // If there's a next step ID and this is in the flow diagram view, mark as completed
+      let updatedCompletedSteps = [...prev.completedSteps];
+      if (mode === 'map' && isNewSelection && !prev.completedSteps.includes(decisionId)) {
+        updatedCompletedSteps = [...updatedCompletedSteps, decisionId];
       }
-    }));
+      
+      return {
+        ...prev,
+        selectedOptions: {
+          ...prev.selectedOptions,
+          [decisionId]: optionId
+        },
+        completedSteps: updatedCompletedSteps,
+        lastStepId: option.nextStepId || prev.lastStepId
+      };
+    });
   };
   
   // TurboApt mode: Handle link challenge completion
@@ -290,7 +313,7 @@ export function ComponentMap() {
       
       {/* Conditional rendering based on mode */}
       {mode === 'map' ? (
-        // Map View (keep existing visualization)
+        // Map View - Using our new FlowDiagram component
         <div 
           ref={containerRef} 
           className="component-map-visualization border rounded-lg p-8 overflow-auto"
@@ -300,170 +323,13 @@ export function ComponentMap() {
             transition: 'transform 0.3s ease'
           }}
         >
-          {/* Decision Path Visualization */}
-          <div className="decision-path-container flex flex-col items-center">
-            <h3 className="text-xl font-bold mb-8">Hacker&apos;s Decision Pathway</h3>
-            
-            {/* Start Node */}
-            <div 
-              className={`decision-node start-node p-4 rounded-lg mb-8 text-center cursor-pointer 
-                        ${activeNode === 'start' ? 'bg-purple-200 border-2 border-purple-500' : 'bg-purple-100 border border-purple-200'}`}
-              onClick={() => handleNodeClick('start')}
-            >
-              <div className="font-bold">Start: &quot;I want to build a dApp&quot;</div>
-              {activeNode === 'start' && (
-                <div className="mt-2 text-sm">
-                  This is the beginning of your journey to build a decentralized application on Aptos.
-                  Choose your path wisely!
-                </div>
-              )}
-            </div>
-            
-            {/* Decision Pathways */}
-            <div className="decision-paths grid grid-cols-1 gap-8 w-full max-w-3xl">
-              {/* Path 1: Evaluate Aptos */}
-              <div className="decision-path">
-                <div
-                  data-node-id="evaluate"
-                  className={`decision-node p-4 rounded-lg cursor-pointer
-                             ${activeNode === 'evaluate' ? 'bg-blue-200 border-2 border-blue-500' : 'bg-blue-100 border border-blue-200'}`}
-                  onClick={() => handleNodeClick('evaluate')}
-                >
-                  <div className="font-bold">1. Evaluate Aptos or Another Chain?</div>
-                  {activeNode === 'evaluate' && (
-                    <div className="mt-2 text-sm">
-                      <p className="mb-2">Consider these Aptos advantages:</p>
-                      <ul className="list-disc pl-5">
-                        <li>Move language for safer smart contracts</li>
-                        <li>Fast finality with high throughput</li>
-                        <li>Strong developer tooling and support</li>
-                      </ul>
-                    </div>
-                  )}
-                  <div className="options mt-2 flex gap-2 flex-wrap">
-                    <span className="option px-2 py-1 bg-green-100 rounded text-sm hover:bg-green-200">Yes, try Aptos</span>
-                    <span className="option px-2 py-1 bg-red-100 rounded text-sm hover:bg-red-200">Need more info...</span>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Path 2: Move Contract Approach */}
-              <div className="decision-path">
-                <div
-                  data-node-id="contract"
-                  className={`decision-node p-4 rounded-lg cursor-pointer
-                             ${activeNode === 'contract' ? 'bg-blue-200 border-2 border-blue-500' : 'bg-blue-100 border border-blue-200'}`}
-                  onClick={() => handleNodeClick('contract')}
-                >
-                  <div className="font-bold">2. Move Contract Approach</div>
-                  {activeNode === 'contract' && (
-                    <div className="mt-2 text-sm">
-                      <p className="mb-2">Three ways to create Move smart contracts:</p>
-                      <ul className="list-disc pl-5">
-                        <li>AI generation: Fast prototyping without Move knowledge</li>
-                        <li>Templates: Pre-built patterns for common use cases</li>
-                        <li>Migration: Convert from Solidity or other languages</li>
-                      </ul>
-                    </div>
-                  )}
-                  <div className="options mt-2 flex gap-2 flex-wrap">
-                    <span className="option px-2 py-1 bg-green-100 rounded text-sm hover:bg-green-200">AI-Generated</span>
-                    <span className="option px-2 py-1 bg-green-100 rounded text-sm hover:bg-green-200">Use Template</span>
-                    <span className="option px-2 py-1 bg-green-100 rounded text-sm hover:bg-green-200">Migrate EVM/Solana</span>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Path 3: Frontend Identity & Wallets */}
-              <div className="decision-path">
-                <div
-                  data-node-id="identity"
-                  className={`decision-node p-4 rounded-lg cursor-pointer
-                             ${activeNode === 'identity' ? 'bg-blue-200 border-2 border-blue-500' : 'bg-blue-100 border border-blue-200'}`}
-                  onClick={() => handleNodeClick('identity')}
-                >
-                  <div className="font-bold">3. Frontend Identity & Wallets</div>
-                  {activeNode === 'identity' && (
-                    <div className="mt-2 text-sm">
-                      <p className="mb-2">Choose your authentication approach:</p>
-                      <ul className="list-disc pl-5">
-                        <li>Aptos Connect: Social login with self-custody</li>
-                        <li>Google/Social Login: Familiar Web2 experience</li>
-                        <li>Wallet Adapter: Traditional Web3 connection</li>
-                      </ul>
-                    </div>
-                  )}
-                  <div className="options mt-2 flex gap-2 flex-wrap">
-                    <span className="option px-2 py-1 bg-green-100 rounded text-sm hover:bg-green-200">Aptos Connect</span>
-                    <span className="option px-2 py-1 bg-green-100 rounded text-sm hover:bg-green-200">Google Login</span>
-                    <span className="option px-2 py-1 bg-green-100 rounded text-sm hover:bg-green-200">Wallet Adapter</span>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Path 4: Data & Indexing */}
-              <div className="decision-path">
-                <div
-                  data-node-id="data"
-                  className={`decision-node p-4 rounded-lg cursor-pointer
-                             ${activeNode === 'data' ? 'bg-blue-200 border-2 border-blue-500' : 'bg-blue-100 border border-blue-200'}`}
-                  onClick={() => handleNodeClick('data')}
-                >
-                  <div className="font-bold">4. Data & Indexing</div>
-                  {activeNode === 'data' && (
-                    <div className="mt-2 text-sm">
-                      <p className="mb-2">Decide how to access blockchain data:</p>
-                      <ul className="list-disc pl-5">
-                        <li>Direct On-Chain Calls: Simple but limited to current state</li>
-                        <li>No-Code Indexer: Easy historical data without backend</li>
-                        <li>Custom Backend: Full control for complex requirements</li>
-                      </ul>
-                    </div>
-                  )}
-                  <div className="options mt-2 flex gap-2 flex-wrap">
-                    <span className="option px-2 py-1 bg-green-100 rounded text-sm hover:bg-green-200">Direct On-Chain Calls</span>
-                    <span className="option px-2 py-1 bg-green-100 rounded text-sm hover:bg-green-200">No-Code Indexer</span>
-                    <span className="option px-2 py-1 bg-green-100 rounded text-sm hover:bg-green-200">Custom Backend</span>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Path 5: Deployment & Testing */}
-              <div className="decision-path">
-                <div
-                  data-node-id="deployment"
-                  className={`decision-node p-4 rounded-lg cursor-pointer
-                             ${activeNode === 'deployment' ? 'bg-blue-200 border-2 border-blue-500' : 'bg-blue-100 border border-blue-200'}`}
-                  onClick={() => handleNodeClick('deployment')}
-                >
-                  <div className="font-bold">5. Deployment & Testing</div>
-                  {activeNode === 'deployment' && (
-                    <div className="mt-2 text-sm">
-                      <p className="mb-2">Choose your deployment strategy:</p>
-                      <ul className="list-disc pl-5">
-                        <li>One-Click Deploy: Fastest for hackathons</li>
-                        <li>Local CLI: More control over deployment</li>
-                        <li>CI/CD: Professional development workflow</li>
-                      </ul>
-                    </div>
-                  )}
-                  <div className="options mt-2 flex gap-2 flex-wrap">
-                    <span className="option px-2 py-1 bg-green-100 rounded text-sm hover:bg-green-200">One-Click Deploy</span>
-                    <span className="option px-2 py-1 bg-green-100 rounded text-sm hover:bg-green-200">Local CLI</span>
-                    <span className="option px-2 py-1 bg-green-100 rounded text-sm hover:bg-green-200">CI/CD</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Connection lines would be SVG paths in a production implementation */}
-            
-            <div className="mt-12 text-center text-gray-500 max-w-2xl">
-              <p className="mb-2 italic">This interactive map helps you understand developer decision pathways on Aptos.</p>
-              <p>Click on any decision point above to see more details. In a full implementation, 
-                 this would include animated connections between components and detailed diagrams for each technology.</p>
-            </div>
-          </div>
+          <FlowDiagram
+            zoom={zoom}
+            userProgress={userProgress}
+            onOptionSelect={handleOptionSelect}
+            activeNode={activeNode}
+            onNodeClick={handleNodeClick}
+          />
         </div>
       ) : (
         // TurboApt View (wizard-style experience)

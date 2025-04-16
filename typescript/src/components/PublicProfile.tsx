@@ -10,6 +10,7 @@ import * as Tooltip from '@radix-ui/react-tooltip';
 import { TwitterIcon, GithubIcon, FacebookIcon, InstagramIcon, LinkedinIcon } from "lucide-react";
 import { DiscordLogoIcon, PaperPlaneIcon, ExternalLinkIcon, Share1Icon, CopyIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import { InspectorButton, InspectorHighlight } from './Inspector';
 
 interface PublicProfileProps {
   profile: Profile;
@@ -148,55 +149,60 @@ export default function PublicProfile({ profile }: PublicProfileProps) {
           {/* Profile Header */}
           <header className="flex flex-col items-center mb-8">
             {/* Profile Picture with Dialog */}
-            <Dialog.Root>
-              <Dialog.Trigger asChild>
-                <button className="relative w-[96px] h-[96px] mb-4 sm:w-[120px] sm:h-[120px] rounded-full overflow-hidden hover:opacity-90 transition-opacity">
-                  <Image
-                    src={resolvedImageUrl}
-                    alt={`${username}'s profile picture`}
-                    width={120}
-                    height={120}
-                    className="rounded-full object-cover border-2 border-white shadow-lg w-full h-full"
-                  />
-                </button>
-              </Dialog.Trigger>
-              <Dialog.Portal>
-               <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-                <Dialog.Title>PFP</Dialog.Title>
-                  <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-[90vw] max-h-[90vh]">
-                    <div className="relative">
-                      <Image
-                        src={resolvedImageUrl}
-                        alt={`${username}'s profile picture`}
-                        width={500}
-                        height={500}
-                        className="rounded-lg object-contain max-h-[90vh]"
-                      />
-                      <Dialog.Close asChild>
-                        <button
-                          className="absolute top-2 right-2 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
-                          aria-label="Close"
-                        >
-                          <svg
-                            width="15"
-                            height="15"
-                            viewBox="0 0 15 15"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
+            <InspectorHighlight
+              elementId="Profile Picture"
+              description="The user's profile picture displayed from their stored image URL"
+            >
+              <Dialog.Root>
+                <Dialog.Trigger asChild>
+                  <button className="relative w-[96px] h-[96px] mb-4 sm:w-[120px] sm:h-[120px] rounded-full overflow-hidden hover:opacity-90 transition-opacity">
+                    <Image
+                      src={resolvedImageUrl}
+                      alt={`${username}'s profile picture`}
+                      width={120}
+                      height={120}
+                      className="rounded-full object-cover border-2 border-white shadow-lg w-full h-full"
+                    />
+                  </button>
+                </Dialog.Trigger>
+                <Dialog.Portal>
+                 <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+                  <Dialog.Title>PFP</Dialog.Title>
+                    <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-[90vw] max-h-[90vh]">
+                      <div className="relative">
+                        <Image
+                          src={resolvedImageUrl}
+                          alt={`${username}'s profile picture`}
+                          width={500}
+                          height={500}
+                          className="rounded-lg object-contain max-h-[90vh]"
+                        />
+                        <Dialog.Close asChild>
+                          <button
+                            className="absolute top-2 right-2 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+                            aria-label="Close"
                           >
-                            <path
-                              d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03157 3.2184C3.80702 2.99385 3.44295 2.99385 3.2184 3.2184C2.99385 3.44295 2.99385 3.80702 3.2184 4.03157L6.68682 7.50005L3.2184 10.9685C2.99385 11.193 2.99385 11.5571 3.2184 11.7816C3.44295 12.0062 3.80702 12.0062 4.03157 11.7816L7.50005 8.31328L10.9685 11.7816C11.193 12.0062 11.5571 12.0062 11.7816 11.7816C12.0062 11.5571 12.0062 11.193 11.7816 10.9685L8.31328 7.50005L11.7816 4.03157Z"
-                              fill="currentColor"
-                              fillRule="evenodd"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </button>
-                      </Dialog.Close>
-                    </div>
-                </Dialog.Content>
-              </Dialog.Portal>
-            </Dialog.Root>
+                            <svg
+                              width="15"
+                              height="15"
+                              viewBox="0 0 15 15"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M11.7816 4.03157C12.0062 3.80702 12.0062 3.44295 11.7816 3.2184C11.5571 2.99385 11.193 2.99385 10.9685 3.2184L7.50005 6.68682L4.03157 3.2184C3.80702 2.99385 3.44295 2.99385 3.2184 3.2184C2.99385 3.44295 2.99385 3.80702 3.2184 4.03157L6.68682 7.50005L3.2184 10.9685C2.99385 11.193 2.99385 11.5571 3.2184 11.7816C3.44295 12.0062 3.80702 12.0062 4.03157 11.7816L7.50005 8.31328L10.9685 11.7816C11.193 12.0062 11.5571 12.0062 11.7816 11.7816C12.0062 11.5571 12.0062 11.193 11.7816 10.9685L8.31328 7.50005L11.7816 4.03157Z"
+                                fill="currentColor"
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </button>
+                        </Dialog.Close>
+                      </div>
+                  </Dialog.Content>
+                </Dialog.Portal>
+              </Dialog.Root>
+            </InspectorHighlight>
 
             {/* Profile Info */}
             <div className="text-center w-full max-w-[400px] mx-auto">
@@ -204,72 +210,92 @@ export default function PublicProfile({ profile }: PublicProfileProps) {
                 {username}
               </h1>
               <div className="flex items-center justify-center gap-4 mb-4">
-                <Tooltip.Provider>
-                  <Tooltip.Root>
-                    <Tooltip.Trigger asChild>
-                      <Link
-                        href={`https://explorer.aptoslabs.com/account/${profile.owner}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center text-white/70 hover:text-white"
-                      >
-                        <Image
-                          src="/favicon.ico"
-                          alt="View in Explorer"
-                          width={16}
-                          height={16}
-                        />
-                      </Link>
-                    </Tooltip.Trigger>
-                    <Tooltip.Portal>
-                      <Tooltip.Content
-                        className="rounded-md bg-white px-3 py-2 text-sm text-gray-700 shadow-md"
-                        sideOffset={5}
-                      >
-                        View in Explorer
-                        <Tooltip.Arrow className="fill-white" />
-                      </Tooltip.Content>
-                    </Tooltip.Portal>
-                  </Tooltip.Root>
-                </Tooltip.Provider>
+                <InspectorHighlight
+                  elementId="Explorer Link"
+                  description="View this profile's account on the Aptos Explorer"
+                >
+                  <Tooltip.Provider>
+                    <Tooltip.Root>
+                      <Tooltip.Trigger asChild>
+                        <Link
+                          href={`https://explorer.aptoslabs.com/account/${profile.owner}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-white/70 hover:text-white"
+                        >
+                          <Image
+                            src="/favicon.ico"
+                            alt="View in Explorer"
+                            width={16}
+                            height={16}
+                          />
+                        </Link>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.Content
+                          className="rounded-md bg-white px-3 py-2 text-sm text-gray-700 shadow-md"
+                          sideOffset={5}
+                        >
+                          View in Explorer
+                          <Tooltip.Arrow className="fill-white" />
+                        </Tooltip.Content>
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                  </Tooltip.Provider>
+                </InspectorHighlight>
 
-                <Tooltip.Provider>
-                  <Tooltip.Root>
-                    <Tooltip.Trigger asChild>
-                      <button
-                        onClick={handleShare}
-                        className="inline-flex items-center text-white/70 hover:text-white"
-                      >
-                        <Share1Icon className="w-4 h-4" />
-                      </button>
-                    </Tooltip.Trigger>
-                    <Tooltip.Portal>
-                      <Tooltip.Content
-                        className="rounded-md bg-white px-3 py-2 text-sm text-gray-700 shadow-md"
-                        sideOffset={5}
-                      >
-                        {shareText}
-                        <Tooltip.Arrow className="fill-white" />
-                      </Tooltip.Content>
-                    </Tooltip.Portal>
-                  </Tooltip.Root>
-                </Tooltip.Provider>
+                <InspectorHighlight
+                  elementId="Share Profile"
+                  description="Share this profile with others"
+                >
+                  <Tooltip.Provider>
+                    <Tooltip.Root>
+                      <Tooltip.Trigger asChild>
+                        <button
+                          onClick={handleShare}
+                          className="inline-flex items-center text-white/70 hover:text-white"
+                        >
+                          <Share1Icon className="w-4 h-4" />
+                        </button>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.Content
+                          className="rounded-md bg-white px-3 py-2 text-sm text-gray-700 shadow-md"
+                          sideOffset={5}
+                        >
+                          {shareText}
+                          <Tooltip.Arrow className="fill-white" />
+                        </Tooltip.Content>
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                  </Tooltip.Provider>
+                </InspectorHighlight>
               </div>
-              <p className="text-[16px] sm:text-[18px] text-white/80 mb-8">{profile.description}</p>
+              <InspectorHighlight
+                elementId="Profile Bio"
+                description="User's profile description"
+              >
+                <p className="text-[16px] sm:text-[18px] text-white/80 mb-8">{profile.description}</p>
+              </InspectorHighlight>
             </div>
           </header>
 
           {/* Links Section */}
           <section className="space-y-3 mb-8 w-full max-w-[500px] mx-auto">
             {profile.links.map((link) => (
-              <div key={link.id} className="relative group flex items-center gap-2">
-                <Link href={link.url} target="_blank" rel="noopener noreferrer" className="block w-full">
-                  <div
-                    className="px-4 py-[14px] sm:py-4 text-[14px] sm:text-[16px] font-semibold
-                              text-center bg-white/90 group-hover:bg-white 
-                              text-[#000000] rounded-[14px] transition-all 
-                              duration-200 backdrop-blur-sm shadow-md
-                              group-hover:scale-[1.02] grid grid-cols-[24px_1fr] items-center"
+              <InspectorHighlight
+                key={link.id}
+                elementId="Profile Link"
+                description="Links added by the profile owner"
+              >
+                <div key={link.id} className="relative group flex items-center gap-2">
+                  <Link href={link.url} target="_blank" rel="noopener noreferrer" className="block w-full">
+                    <div
+                      className="px-4 py-[14px] sm:py-4 text-[14px] sm:text-[16px] font-semibold
+                                text-center bg-white/90 group-hover:bg-white
+                                text-[#000000] rounded-[14px] transition-all
+                                duration-200 backdrop-blur-sm shadow-md
+                                group-hover:scale-[1.02] grid grid-cols-[24px_1fr] items-center"
                   >
                     <span className="flex justify-start">
                       {getLinkIcon(link.url)}
@@ -330,24 +356,33 @@ export default function PublicProfile({ profile }: PublicProfileProps) {
                       <Popover.Arrow className="fill-white" />
                     </Popover.Content>
                   </Popover.Portal>
-                </Popover.Root>
-              </div>
+                  </Popover.Root>
+                </div>
+              </InspectorHighlight>
             ))}
           </section>
 
           {/* Edit Button (only shown to profile owner) */}
           {isOwner && (
-            <div className="w-full max-w-[500px] mx-auto mb-8">
-              <button
-                onClick={handleEdit}
-                className="w-full px-4 py-[14px] sm:py-4 text-[14px] sm:text-[16px] font-semibold
-                         text-center bg-white/30 hover:bg-white/40 
-                         text-white rounded-[14px] transition-all 
-                         duration-200 backdrop-blur-sm shadow-md
-                         hover:scale-[1.02]"
+            <div className="w-full max-w-[500px] mx-auto mb-8 space-y-3">
+              <InspectorHighlight
+                elementId="Edit Profile"
+                description="Edit your profile information and links"
               >
-                Edit Profile
-              </button>
+                <button
+                  onClick={handleEdit}
+                  className="w-full px-4 py-[14px] sm:py-4 text-[14px] sm:text-[16px] font-semibold
+                           text-center bg-white/30 hover:bg-white/40
+                           text-white rounded-[14px] transition-all
+                           duration-200 backdrop-blur-sm shadow-md
+                           hover:scale-[1.02]"
+                >
+                  Edit Profile
+                </button>
+              </InspectorHighlight>
+              
+              {/* Inspector Button */}
+              <InspectorButton className="w-full" />
             </div>
           )}
 

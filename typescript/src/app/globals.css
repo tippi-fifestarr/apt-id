@@ -95,3 +95,59 @@
 .tour-tooltip {
   animation: fade-in 0.3s ease-out, slide-up 0.3s ease-out;
 }
+
+/* Inspector Feature Styles */
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.5);
+  }
+}
+
+.inspector-active {
+  position: relative;
+  z-index: 45; /* Below the tooltip but above the overlay */
+  border-radius: 4px;
+  animation: glow 2s infinite;
+}
+
+/* Ensure the inspector mode doesn't cause layout shifts */
+[data-inspector-highlight="true"] {
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+}
+
+/* Make inspector panel animations smooth */
+.inspector-active {
+  transition: all 0.2s ease-out;
+}
+
+.inspector-tooltip {
+  animation: fade-in 0.2s ease-out, slide-up 0.2s ease-out;
+}
+
+.inspector-mode .non-inspectable {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* Fix for z-index stacking in inspector mode */
+.fixed {
+  z-index: auto;
+}
+
+[data-inspector-highlight="true"] > .fixed {
+  z-index: 46;
+}
+
+/* Card styling in inspector mode */
+[data-inspector-highlight="true"] .card {
+  position: relative;
+  z-index: 1;
+}

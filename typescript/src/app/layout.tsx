@@ -3,6 +3,7 @@ import { WalletProvider } from "../components/WalletProvider";
 import { ButtonStack } from "../components/ButtonStack";
 import { CodeCornerFlip } from "../components/CodeCornerFlip";
 import { TurboAptosProvider, TourTooltip, TourHighlight } from "../components/TurboAptos";
+import { InspectorProvider } from "../components/Inspector";
 import { ClientOnly } from "../components/ClientOnly";
 import { allTours } from "../tours";
 import "./globals.css";
@@ -24,17 +25,19 @@ export default function RootLayout({
         <WalletProvider>
           {/* Wrap TurboAptos and all interactive components in ClientOnly to prevent SSR issues */}
           <ClientOnly>
-            <TurboAptosProvider tours={allTours}>
-              {/* Tour UI components */}
-              <TourTooltip />
-              <TourHighlight />
-              
-              {/* Button stack in bottom right corner */}
-              <ButtonStack />
-              
-              {/* Code corner flip in bottom left */}
-              <CodeCornerFlip />
-            </TurboAptosProvider>
+            <InspectorProvider>
+              <TurboAptosProvider tours={allTours}>
+                {/* Tour UI components */}
+                <TourTooltip />
+                <TourHighlight />
+                
+                {/* Button stack in bottom right corner */}
+                <ButtonStack />
+                
+                {/* Code corner flip in bottom left */}
+                <CodeCornerFlip />
+              </TurboAptosProvider>
+            </InspectorProvider>
           </ClientOnly>
           
           {children}

@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Profile } from "@/types";
 import { fetchBioAndLinks } from "@/app/api/util.ts";
 import Link from "next/link";
+import { InspectorProvider } from "@/components/Inspector";
 
 export default function Home() {
   const { connected, account } = useWallet();
@@ -109,8 +110,14 @@ export default function Home() {
     return (
       <div className="flex flex-col gap-6">
         <h1 className="text-3xl font-bold text-white text-center">Edit Your Profile</h1>
-        <ProfileEditor ansName={ansName} profile={profile || undefined} onViewProfile={handleViewProfile}
-                       loading={loading || ansLoading} />
+        <InspectorProvider>
+          <ProfileEditor
+            ansName={ansName}
+            profile={profile || undefined}
+            onViewProfile={handleViewProfile}
+            loading={loading || ansLoading}
+          />
+        </InspectorProvider>
       </div>
     );
   };

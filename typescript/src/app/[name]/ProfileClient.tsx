@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import PublicProfile from "../../components/PublicProfile";
 import { Profile } from "@/types";
 import { fetchBioAndLinks } from "@/app/api/util.ts";
+import { InspectorProvider } from "@/components/Inspector";
 
 export default function ProfileClient({ profile: initialProfile }: { profile: Profile }) {
   const [loading, setLoading] = useState(true);
@@ -47,6 +48,10 @@ export default function ProfileClient({ profile: initialProfile }: { profile: Pr
       </div>
     );
   }
-
+return (
+  <InspectorProvider>
+    <PublicProfile profile={profile} />
+  </InspectorProvider>
+);
   return <PublicProfile profile={profile} />;
 }
